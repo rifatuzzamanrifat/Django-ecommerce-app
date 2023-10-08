@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+
 <html class="no-js" lang="en">
 <!--   03:20:39 GMT -->
 <head>
@@ -134,11 +135,16 @@
                         <ul class="offcanvas_main_menu">
                             <li><a href="{% url 'home' %}">home</a></li>
                             <li><a href="product-details.html">Product</a></li>
+                            <li><a href="contact.html">Contact Us</a></li>
+                            {% if user.is_authenticated %}
+                            <li><a href="{% url 'signup' %}">{{user.username}}</a></li>
+                            <li><a href="{% url 'logout' %}">Logout</a></li>
+                            {% else %}
                             <li><a href="{% url 'login' %}">login</a></li>
                             <li>
                                 <a href="{% url 'signup' %}">register</a>
                             </li>
-                            <li><a href="contact.html"> Contact Us</a></li>
+                            {% endif %}
                         </ul>
                     </div>
                     <div class="Offcanvas_footer">
@@ -298,11 +304,16 @@
                                 <ul>
                                     <li><a href="{% url 'home' %}">home</a></li>
                                     <li><a href="product-details.html">Product</a></li>
+                                    <li><a href="contact.html">Contact Us</a></li>
+                                    {% if user.is_authenticated %}
+                                    <li><a href="{% url 'signup' %}">{{user.username}}</a></li>
+                                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                                    {% else %}
                                     <li><a href="{% url 'login' %}">login</a></li>
                                     <li>
                                         <a href="{% url 'signup' %}">register</a>
                                     </li>
-                                    <li><a href="contact.html"> Contact Us</a></li>
+                                    {% endif %}
                                 </ul>
                             </nav>
                         </div>

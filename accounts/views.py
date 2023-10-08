@@ -50,6 +50,8 @@ def signup(r):
 
 
 def login(r):
+    if r.user.is_authenticated:
+        return redirect('home')
     if r.method == 'POST':
         username = r.POST.get('name')
         password = r.POST.get('pass')
