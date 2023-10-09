@@ -4,18 +4,18 @@ from django.contrib import messages
 
 
 # Create your views here.
-def forget_pass(r):
-    return render(r, 'accounts/forget_pass.html')
+def forget_pass(request):
+    return render(request, 'accounts/forget_pass.html')
 
 
-def signup(r):
-    if r.method == 'POST':
-        name = r.POST.get('name')
-        username = r.POST.get('username')
-        email = r.POST.get(' email ')
-        password = r.POST.get(' pass')
+def signup(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        username = request.POST.get('username')
+        email = request.POST.get(' email ')
+        password = request.POST.get(' pass')
         if len(password) < 8:
-            messages.warning(r, "Password must be 8 character.")
+            messages.warning(request, "Password must be 8 character.")
         else:
             if password:
                 a = []
@@ -31,41 +31,41 @@ def signup(r):
                     if len(a) != 0 and len(c) != 0:
                         if password == password:
                             if User.objects.filter(username=username).exits():
-                                messages.warning(r, "Username is Already Taken.")
+                                messages.warning(request, "Username is Already Taken.")
                             elif User.objects.filter(email=email).exits():
-                                messages.warning(r, "Email is Already Taken.")
+                                messages.warning(request, "Email is Already Taken.")
                             else:
                                 user = User.objects.create_user(name=name, username=username, email=email,
                                                                 password=password)
                                 user.set_password(password)
                                 user.save()
-                                messages.success(r, "Profile Created.")
+                                messages.success(request, "Profile Created.")
                                 return redirect('Log In')
                         else:
-                            messages.warning(r, "Password not Matched.")
+                            messages.warning(request, "Password not Matched.")
                     else:
-                        messages.warning(r, "Enter minimum 1 number and 1 special character in your password.")
+                        messages.warning(request, "Enter minimum 1 number and 1 special character in your password.")
 
-    return render(r, 'accounts/signup.html')
+    return render(request, 'accounts/signup.html')
 
 
-def login(r):
-    if r.user.is_authenticated:
+def login(request):
+    if request.user.is_authenticated:
         return redirect('home')
-    if r.method == 'POST':
-        username = r.POST.get('name')
-        password = r.POST.get('pass')
+    if request.method == 'POST':
+        username = request.POST.get('name')
+        password = request.POST.get('pass')
         user = auth.authenticate(username=username, password=password)
         if user:
-            auth.login(r, user)
-            messages.warning(r, "User Logged In.")
+            auth.login(request, user)
+            messages.warning(request, "User Logged In.")
             return redirect('home')
         else:
-            messages.warning(r, "User Not Found.")
+            messages.warning(request, "User Not Found.")
             return redirect('signup')
-    return render(r, 'accounts/login.html')
+    return render(request, 'accounts/login.html')
 
 
-def logout(r):
-    auth.logout(r)
+def logout(request):
+    auth.logout(request)
     return redirect('login')
