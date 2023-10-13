@@ -1,0 +1,88 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block title %}Verify Otp{% endblock %}
+{% block body %}
+
+<!--breadcrumbs area start-->
+<div class="breadcrumbs_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb_content">
+                    <ul>
+                        <li><a href="{% url 'home' %}">home</a></li>
+                        <li>Verify Otp</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--breadcrumbs area end-->
+
+<section class="account">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div
+                        class="account-contents"
+                        style="
+                background: url('{% static 'assets/img/about/about1.jpg' %}');
+                background-size: cover;
+              "
+                >
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                            <div class="account-thumb">
+                                <h2>Verify Otp</h2>
+                                <p>
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                    Quis consectetur similique deleniti pariatur enim cumque.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                            <div class="account-content">
+                                <form action="#">
+                                    <div class="single-acc-field">
+                                        <label for="email">Email</label>
+                                        <input
+                                                type="email"
+                                                id="email"
+                                                name="email"
+                                                placeholder="Enter your Email"
+                                        />
+                                    </div>
+                                    <div class="single-acc-field">
+                                        <label for="otp">OTP</label>
+                                        <input
+                                                type="number"
+                                                id="otp"
+                                                name="otp"
+                                                placeholder="Enter your OTP"
+                                        />
+                                    </div>
+                                    <div class="single-acc-field">
+                                        <label for="password">Email</label>
+                                        <input
+                                                type="password"
+                                                id="password"
+                                                name="pass"
+                                                placeholder="Enter New Password."
+
+                                        />
+                                    </div>
+                                    <div class="single-acc-field">
+                                        <button type="submit">Reset Password</button>
+                                    </div>
+                                    <a href="{% url 'login' %}">Login now</a>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

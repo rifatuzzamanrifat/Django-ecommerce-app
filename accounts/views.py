@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
+import random
+from django.conf import settings
+from django.core.mail import send_mail
+from .models import Profile
+from django.contrib.auth import update_session_auth_hash
 
 
 # Create your views here.
-def forget_pass(request):
-    return render(request, 'accounts/forget_pass.html')
 
 
 def signup(request):
@@ -64,9 +67,68 @@ def login(request):
         else:
             messages.warning(request, "User Not Found.")
             return redirect('signup')
+
     return render(request, 'accounts/login.html')
 
 
 def logout(request):
     auth.logout(request)
     return redirect('login')
+
+
+def forget_pass(request):
+    otp = random.randint(1111, 9999)
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        try:
+            if email:
+                send_mail_registration(email, otp)
+                username = User.objects.get(email=email)
+                if username:
+                    try:
+                        prof = Profile.objects.get(username=username)
+                        if prof:
+                            prof.otp = otp
+                            prof.save()
+                            return redirect('verify_otp')
+                    except:
+                        prof = Profile.objects.create(username=username, otp=otp)
+                        prof.save()
+                        return redirect('verify_otp')
+        except:
+            messages.warning(request, "User Not Found.")
+            return redirect('forget_pass')
+
+    return render(request, 'accounts/forget_pass.html')
+
+
+def verify_otp(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('pass')
+        otp = request.POST.get('otp')
+        if email:
+            user = User.objects.get(email=email)
+            if user:
+                prof = Profile.objects.get(user=user)
+                if prof.otp == otp:
+                    user.set_password(password)
+                    user.save()
+                    update_session_auth_hash(request, user)
+                    messages.warning(request, "User Password Changed Successfully.")
+                    return redirect('login')
+                else:
+                    messages.warning(request, "Otp not matched Try again.")
+            else:
+                messages.warning(request, "No user found.")
+                return redirect('forget_pass')
+
+    return render(request, 'accounts/verify_otp.html')
+
+
+def send_mail_registration(email, otp):
+    subject = "Account Verification OTP"
+    message = f'Your verify otp is :  {otp}'
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = [email]
+    send_mail(subject, message, email_from, recipient_list)
